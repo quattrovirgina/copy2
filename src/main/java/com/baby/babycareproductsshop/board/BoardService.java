@@ -2,6 +2,7 @@ package com.baby.babycareproductsshop.board;
 
 import com.baby.babycareproductsshop.board.model.*;
 import com.baby.babycareproductsshop.common.*;
+import com.baby.babycareproductsshop.security.AuthenticationFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.parameters.P;
@@ -19,6 +20,7 @@ import static com.baby.babycareproductsshop.common.Const.SUCCESS;
 public class BoardService {
     private final BoardMapper mapper;
     private final MyFileUtils myFileUtils;
+    private final AuthenticationFacade authenticationFacade;
 
     public BoardPicsDto createPics(int iboard, List<MultipartFile> pics) {
         try {
@@ -38,6 +40,7 @@ public class BoardService {
             return dto;
         } catch (Exception e) {
             // 추후 예외 처리 추가
+            e.printStackTrace();
             return null;
         }
     }
@@ -62,6 +65,7 @@ public class BoardService {
             }
         } catch (Exception e) {
             // 추후 예외 처리 추가
+            e.printStackTrace();
             return null;
         }
     }
@@ -69,6 +73,8 @@ public class BoardService {
     public ResVo updBoard(BoardUpdDto dto) {
         try {
             int updBoardRows = mapper.updBoard(dto);
+            int loginUserPk = authenticationFacade.getLoginUserPk();
+            log.info("loginUserPk = {}", loginUserPk);
 
             if (Utils.isNotNull(updBoardRows)) {
                 BoardPicsDto picsDto = createPics(dto.getIboard(), dto.getPics());
@@ -85,6 +91,8 @@ public class BoardService {
                 return null;
             }
         } catch (Exception e) {
+            // 추후 예외 처리 추가
+            e.printStackTrace();
             return new ResVo(FAIL);
         }
     }
@@ -92,6 +100,8 @@ public class BoardService {
     public ResVo delBoard(int iboard) {
         try {
             int delBoardRows = mapper.delBoard(iboard);
+            int loginUserPk = authenticationFacade.getLoginUserPk();
+            log.info("loginUserPk = {}", loginUserPk);
 
             if (Utils.isNotNull(delBoardRows)) {
                 String path = "/board/" + iboard;
@@ -102,33 +112,42 @@ public class BoardService {
                 return null;
             }
         } catch (Exception e) {
-            e.printStackTrace();
             // 추후 예외 처리 추가
+            e.printStackTrace();
             return null;
         }
     }
 
     public BoardSelVo selBoard(int iboard) {
-        return mapper.selBoard(iboard);
+        try {
+            BoardSelVo vo = mapper.selBoard(iboard);
+
+            if (Utils.isNotNull(vo)) {
+                return vo;
+            } else {
+                // 추후 예외 처리 추가
+                return null;
+            }
+        } catch (Exception e) {
+            // 추후 예외 처리 추가
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public List<BoardGetVo> getBoard(PageNation.Criteria criteria) {
-        return mapper.getBoard(criteria);
-    }
+        try {
+            List<BoardGetVo> list = mapper.getBoard(criteria);
 
-    public List<BoardCommentGetDto> getComment(int iboard) {
-        return mapper.getComment(iboard);
-    }
-
-    public ResVo insComment(BoardCommentInsDto dto) {
-        return new ResVo(Utils.isNotNull(mapper.insComment(dto)) ? SUCCESS : FAIL);
-    }
-
-    public ResVo delComment(int icomment) {
-        return new ResVo(Utils.isNotNull(mapper.delComment(icomment)) ? SUCCESS : FAIL);
-    }
-
-    public ResVo updComment(BoardCommentUpdDto dto) {
-        return new ResVo(Utils.isNotNull(mapper.updComment(dto)) ? SUCCESS : FAIL);
+            if (Utils.isNotNull(list)) {
+                return list;
+            } else {
+                // 추후 예외 처리 추가
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
