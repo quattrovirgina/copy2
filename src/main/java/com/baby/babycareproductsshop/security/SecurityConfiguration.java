@@ -13,8 +13,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfiguration {
-    
+
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -22,20 +23,21 @@ public class SecurityConfiguration {
                 .formLogin(formLogin -> formLogin.disable())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(author -> author.requestMatchers("/api/user/sign-in",
-                                                                        "/api/user/sign-up",
-                                                                        "/api/user/refresh-token",
-                                                                        "/error",
-                                                                        "/err",
-                                                                        "/",
-                                                                        "/index.html",
-                                                                        "/static/**",
-                                                                        "/swagger.html",
-                                                                        "/swagger-ui/**",
-                                                                        "/v3/api-docs/**"
-                            ).permitAll()
-                        .anyRequest().authenticated()
+                                        "/api/user/sign-up",
+                                        "/api/user/sign-up/**",
+                                        "/api/user/refresh-token",
+                                        "/error",
+                                        "/err",
+                                        "/",
+                                        "/index.html",
+                                        "/static/**",
+                                        "/swagger.html",
+                                        "/swagger-ui/**",
+                                        "/v3/api-docs/**"
+                                ).permitAll()
+                                .anyRequest().authenticated()
                 )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) 
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(except -> {
                     except.authenticationEntryPoint(new JwtAuthenticationEntryPoint())
                             .accessDeniedHandler(new JwtAccessDeniedHandler());
