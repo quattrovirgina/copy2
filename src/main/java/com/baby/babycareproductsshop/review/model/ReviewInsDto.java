@@ -2,7 +2,6 @@ package com.baby.babycareproductsshop.review.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
