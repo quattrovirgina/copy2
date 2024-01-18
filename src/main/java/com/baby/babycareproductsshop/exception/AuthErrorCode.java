@@ -11,8 +11,7 @@ public enum AuthErrorCode implements ErrorCode{ //enum : Const 대체 할 수 �
 
     // 리뷰 에러코드
     UPLOAD_PIC_NOT_REVIEW(HttpStatus.NOT_FOUND, "사진은 최대 5장까지만 넣을 수 있습니다."),
-    REVIEW_NOT_PRODUCT_SCORE(HttpStatus.NOT_FOUND,"사용하신 제품의 별점을 매겨주세요!!"),
-    REVIEW_NOT_CONTENTS(HttpStatus.NOT_FOUND,"사용하신 제품의 후기를 알려주세요!!"),
+    REVIEW_NOT_PRODUCT_SCORE(HttpStatus.NOT_FOUND,"사용하신 제품의 별점과 후기을 알려주세요!!"),
     UPLOAD_REVIEW_REGISTRATION_REVIEW(HttpStatus.OK,"리뷰가 정상적으로 등록되었습니다."),
 
 

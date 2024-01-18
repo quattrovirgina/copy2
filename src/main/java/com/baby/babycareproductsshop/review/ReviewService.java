@@ -38,12 +38,10 @@ public class ReviewService {
         if (dto.getPics().size() > 5) {
             throw new RestApiException(AuthErrorCode.UPLOAD_PIC_NOT_REVIEW);
         }
-        else if (dto.getProductScore() < 1) {
+        else if (dto.getProductScore() < 1 || dto.getContents() == null || dto.getContents().equals("")) {
             throw new RestApiException(AuthErrorCode.REVIEW_NOT_PRODUCT_SCORE);
         }
-        else if (dto.getContents() == null || dto.getContents().equals("")) {
-
-        } else if (dto.getPics().size() <= 5 && dto.getProductScore() > 1) {
+        else if (dto.getPics().size() <= 5 && dto.getProductScore() > 1) {
             for (MultipartFile file : dto.getPics()) {
                String saveFileNm = myFileUtils.transferTo(file, target);
                insDto.getPics().add(saveFileNm);
