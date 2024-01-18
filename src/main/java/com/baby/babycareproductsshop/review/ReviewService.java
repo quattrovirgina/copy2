@@ -35,11 +35,11 @@ public class ReviewService {
         insDto.setIreview(dto.getIreview());
         log.info("insDto = {}",insDto);
         String target = "review/" + dto.getIreview();
-        if (dto.getPics().size() > 5) {
+        if (dto.getPics().size() > 6) {
+            if (dto.getProductScore() < 1 || dto.getContents() == null || dto.getContents().equals("")) {
+                throw new RestApiException(AuthErrorCode.REVIEW_NOT_PRODUCT_SCORE_OR_CONTENTS);
+            }
             throw new RestApiException(AuthErrorCode.UPLOAD_PIC_NOT_REVIEW);
-        }
-        else if (dto.getProductScore() < 1 || dto.getContents() == null || dto.getContents().equals("")) {
-            throw new RestApiException(AuthErrorCode.REVIEW_NOT_PRODUCT_SCORE);
         }
         else if (dto.getPics().size() <= 5 && dto.getProductScore() > 1) {
             for (MultipartFile file : dto.getPics()) {
