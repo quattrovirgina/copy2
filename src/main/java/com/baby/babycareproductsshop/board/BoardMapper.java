@@ -9,22 +9,9 @@ import java.util.List;
 @Mapper
 public interface BoardMapper {
     int insBoard(BoardInsDto dto);
-
     int updBoard(BoardUpdDto dto);
-
     int delBoard(int iboard);
-
     BoardSelVo selBoard(int iboard);
-
     List<BoardGetVo> getBoard(PageNation.Criteria criteria);
-
     int insBoardPics(BoardPicsDto dto);
-
-    List<BoardCommentGetDto> getComment(int iboard);
-
-    int insComment(BoardCommentInsDto dto);
-
-    int delComment(int icomment);
-
-    int updComment(BoardCommentUpdDto dto);
 }
