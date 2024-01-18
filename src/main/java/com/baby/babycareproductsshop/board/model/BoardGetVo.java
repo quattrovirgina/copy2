@@ -13,4 +13,6 @@ public class BoardGetVo {
     private String title;
     @Schema(title = "게시글 작성일", description = "")
     private String createdAt;
+    @Schema(title = "검색어", description = "")
+    private String keyword;
 }

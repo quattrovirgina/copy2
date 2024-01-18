@@ -52,6 +52,7 @@ public class PageNation {
         private int boardCode; // 다중 게시판 식별코드
         private int page; // 페이지 번호
         private int amount; // 한 페이지당 보여 줄 게시글 개수
+        private String keyword;
 
         // 기본값 설정
         public Criteria() {

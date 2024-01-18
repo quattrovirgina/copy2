@@ -22,7 +22,10 @@
     <select id="getBoard">
         SELECT iboard, title, board_code boardCode, created_at createdAt
         FROM t_board
-        WHERE board_code = #{boardCode}
+        WHERE board_code = #{boardCode} AND
+        <if test="keyword != null">
+            title LIKE '%'||#{keyword}||'%'
+        </if>
         ORDER BY iboard DESC
         LIMIT #{pageStart}, #{amount}
     </select>

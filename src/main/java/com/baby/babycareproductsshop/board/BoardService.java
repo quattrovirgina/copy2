@@ -2,10 +2,11 @@ package com.baby.babycareproductsshop.board;
 
 import com.baby.babycareproductsshop.board.model.*;
 import com.baby.babycareproductsshop.common.*;
+import com.baby.babycareproductsshop.exception.AuthErrorCode;
+import com.baby.babycareproductsshop.exception.RestApiException;
 import com.baby.babycareproductsshop.security.AuthenticationFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,9 +40,7 @@ public class BoardService {
 
             return dto;
         } catch (Exception e) {
-            // 추후 예외 처리 추가
-            e.printStackTrace();
-            return null;
+            throw new RestApiException(AuthErrorCode.GLOBAL_EXCEPTION);
         }
     }
 
@@ -56,17 +55,17 @@ public class BoardService {
                 if (dto.getPics().size() == insBoardPicsRows) {
                     return new ResVo(SUCCESS);
                 } else {
-                    // 추후 예외 처리
-                    return null;
+                    // 테이블에 게시글 등록은 됐으나 사진 저장이 제대로 이루어지지 않았을 경우 다 삭제
+                    mapper.delBoard(dto.getIboard());
+                    String path = "/board/" + dto.getIboard();
+                    myFileUtils.delDirTrigger(path);
+                    throw new RestApiException(AuthErrorCode.GLOBAL_EXCEPTION);
                 }
             } else {
-                // 추후 예외 처리 추가
-                return null;
+                throw new RestApiException(AuthErrorCode.GLOBAL_EXCEPTION);
             }
         } catch (Exception e) {
-            // 추후 예외 처리 추가
-            e.printStackTrace();
-            return null;
+            throw new RestApiException(AuthErrorCode.GLOBAL_EXCEPTION);
         }
     }
 
@@ -83,6 +82,7 @@ public class BoardService {
                 if (dto.getPics().size() == insBoardPicsRows) {
                     return new ResVo(SUCCESS);
                 } else {
+                    // >>>>> 테이블에 게시글 수정은 됐으나 사진 업로드가 제대로 이루어지지 않았을 때?
                     // 추후 예외 처리 추가
                     return null;
                 }
