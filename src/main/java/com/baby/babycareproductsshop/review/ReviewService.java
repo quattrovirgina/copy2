@@ -3,6 +3,9 @@ package com.baby.babycareproductsshop.review;
 import com.baby.babycareproductsshop.common.Const;
 import com.baby.babycareproductsshop.common.MyFileUtils;
 import com.baby.babycareproductsshop.common.ResVo;
+import com.baby.babycareproductsshop.exception.AuthErrorCode;
+import com.baby.babycareproductsshop.exception.CommonErrorCode;
+import com.baby.babycareproductsshop.exception.RestApiException;
 import com.baby.babycareproductsshop.review.model.*;
 import com.baby.babycareproductsshop.security.AuthenticationFacade;
 import lombok.RequiredArgsConstructor;
@@ -31,16 +34,23 @@ public class ReviewService {
         ReviewPicsInsDto insDto = new ReviewPicsInsDto();
         insDto.setIreview(dto.getIreview());
         log.info("insDto = {}",insDto);
-        int insReview = mapper.insReview(dto);
         String target = "review/" + dto.getIreview();
-        if(insReview == 1) {
-            if (dto.getPics().size() <= 5) {
-                for (MultipartFile file : dto.getPics()) {
-                    String saveFileNm = myFileUtils.transferTo(file, target);
-                    insDto.getPics().add(saveFileNm);
-                }
-            }
+        if (dto.getPics().size() > 5) {
+            throw new RestApiException(AuthErrorCode.UPLOAD_PIC_NOT_REVIEW);
         }
+        else if (dto.getProductScore() < 1) {
+            throw new RestApiException(AuthErrorCode.REVIEW_NOT_PRODUCT_SCORE);
+        }
+        else if (dto.getContents() == null || dto.getContents().equals("")) {
+
+        } else if (dto.getPics().size() <= 5 && dto.getProductScore() > 1) {
+            for (MultipartFile file : dto.getPics()) {
+               String saveFileNm = myFileUtils.transferTo(file, target);
+               insDto.getPics().add(saveFileNm);
+            }
+            throw new RestApiException(AuthErrorCode.UPLOAD_REVIEW_REGISTRATION_REVIEW);
+        }
+        int insReview = mapper.insReview(dto);
         int insPics = mapper.insReviewPics(insDto);
         return new ResVo(Const.SUCCESS);
     }
