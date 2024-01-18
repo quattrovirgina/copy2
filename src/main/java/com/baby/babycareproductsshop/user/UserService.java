@@ -4,6 +4,8 @@ import com.baby.babycareproductsshop.common.AppProperties;
 import com.baby.babycareproductsshop.common.Const;
 import com.baby.babycareproductsshop.common.MyCookieUtils;
 import com.baby.babycareproductsshop.common.ResVo;
+import com.baby.babycareproductsshop.exception.AuthErrorCode;
+import com.baby.babycareproductsshop.exception.RestApiException;
 import com.baby.babycareproductsshop.product.ProductWishListMapper;
 import com.baby.babycareproductsshop.product.model.ProductSelWishListVo;
 import com.baby.babycareproductsshop.security.AuthenticationFacade;
@@ -46,6 +48,14 @@ public class UserService {
         int insAddressResult = addressMapper.insUserAddress(addressDto);
 
         return new ResVo(dto.getIuser());
+    }
+
+    public ResVo postCheckUid(UserCheckUidDto dto) {
+        UserSignInProcDto result = userMapper.selSignInInfoByUid(dto.getUid());
+        if (result != null) {
+            throw new RestApiException(AuthErrorCode.DUPLICATED_UID);
+        }
+        return new ResVo(Const.SUCCESS);
     }
 
     public UserSelMyInfoVo getMyInfo() {
@@ -145,5 +155,10 @@ public class UserService {
     }
     public List<UserClauseVo> getClause() {
         return userMapper.selClause();
+    }
+
+    public ResVo signout(HttpServletResponse res) {
+        myCookieUtils.deleteCookie(res, "refreshToken");
+        return new ResVo(Const.SUCCESS);
     }
 }
