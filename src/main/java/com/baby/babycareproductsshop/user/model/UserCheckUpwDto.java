@@ -4,8 +4,10 @@ import com.baby.babycareproductsshop.common.Const;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
+import static com.baby.babycareproductsshop.common.Const.PASSWORD_IS_BLANK;
+
 @Data
 public class UserCheckUpwDto {
-    @NotBlank(message = Const.PASSWORD_BLANK_MSG)
+    @NotBlank(message = PASSWORD_IS_BLANK)
     private String upw;
 }

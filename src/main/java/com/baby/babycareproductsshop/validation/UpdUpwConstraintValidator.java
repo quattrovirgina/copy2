@@ -9,6 +9,6 @@ public class UpdUpwConstraintValidator implements ConstraintValidator<UpdUpwCons
     @Override
     public boolean isValid(String upw, ConstraintValidatorContext context){
         String regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@$!%*?&#~_-])[A-Za-z\\d@$!%*?&#.~_-]{8,16}";
-        return upw.isEmpty() || Pattern.matches(upw, regexp);
+        return !"".equals(upw) || !Pattern.matches(upw, regexp);
     }
 }

@@ -5,18 +5,21 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static com.baby.babycareproductsshop.common.Const.*;
+
 @Data
 @NoArgsConstructor
 public class UserInsAddressDto {
     @JsonIgnore
     private int iuser;
-    @NotBlank(message = "우편번호를 입력해주세요.")
+
+    @NotBlank(message = ZIP_CODE_IS_BLANK)
     private String zipCode;
 
-    @NotBlank(message = "주소를 입력해주세요.")
+    @NotBlank(message = ADDRESS_IS_BLANK)
     private String address;
 
-    @NotBlank(message = "상세 주소를 입력해주세요.")
+    @NotBlank(message = ADDRESS_DETAIL_IS_BLANK)
     private String addressDetail;
 
     public UserInsAddressDto(UserSignUpDto dto) {

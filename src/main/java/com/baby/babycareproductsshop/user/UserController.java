@@ -27,7 +27,7 @@ public class UserController {
     }
 
     @PostMapping("/sign-up")
-    public ResVo postSignUp(@Validated(ValidationSequence.class) @RequestBody UserSignUpDto dto) {
+    public ResVo postSignUp(@Valid @RequestBody UserSignUpDto dto) {
         return service.postSignUp(dto);
     }
 
@@ -35,7 +35,7 @@ public class UserController {
             중복되는 닉네임 없음 -> result = 1
             """)
     @PostMapping("/sign-up/check")
-    public ResVo postCheckUid(@Validated(ValidationSequence.class) @RequestBody UserCheckUidDto dto) {
+    public ResVo postCheckUid(@Valid @RequestBody UserCheckUidDto dto) {
         log.info("uid : {}",dto);
         return service.postCheckUid(dto);
     }
@@ -60,7 +60,7 @@ public class UserController {
     }
 
     @PutMapping("/modify")
-    public ResVo putUserInfo(@Validated(ValidationSequence.class) @RequestBody UserUpdDto dto) {
+    public ResVo putUserInfo(@Valid @RequestBody UserUpdDto dto) {
         return service.putUserInfo(dto);
     }
 
