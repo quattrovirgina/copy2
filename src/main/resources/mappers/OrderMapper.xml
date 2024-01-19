@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baby.babycareproductsshop.order.OrderMapper">
+    <insert id="insOrder" useGeneratedKeys="true" keyProperty="IORDER">
+        INSERT INTO t_order
+        SET IUSER = #{iupser},
+        IORDER = #{IORDER},
+        IADDRESS = #{iaddress},
+        RECEIVER = #{receiver},
+        PHONE_NUMBER = #{phoneNumber},
+        EMAIL = #{email},
+        IPRODUCT = #{iproduct},
+        IPAYMENT_OPTION = #{ipaymentOption}
+        <if test="DELIVERY_REQUEST != null and DELIVERY_REQUEST != '' ">
+            ,DELIVERY_REQUEST = #{delivery_request}
+        </if>
+    </insert>
+
+    <select id="getAfterOrder">
+        SELECT A.PROCESS_STATE AS processState, A.CREATED_AT as createdAt, A.IDETAILS as idetails, A.PRODUCT_CNT as productCnt = COUNT(B.IPRODUCT),
+        A.PRODUCT_NM as productNm, C.PRODUCT_PIC as productPic, B.PRICE as Price
+        FROM t_order_details A
+        JOIN t_product B ON A.IPRODUCT = B.IPRODUCT
+        JOIN t_product_pics C ON B.IPRODUCT = C.IPRODUCT
+        WHERE A.IORDER = #{iorder}
+    </select>
+
+    <select id="getOrder">
+        SELECT A.PROCESS_STATE AS process_state, B.CREATED_AT AS createdAt, A.IORDER AS iorder, D.PRODUCT_PIC AS product_pic,
+        C.PRODUCT_NM AS product_nm, B.PRODUCT_CNT AS product_cnt, C.PRICE AS price, E.IREVIEW AS ireview
+        <choose>
+            <when test="PROCESS_STATE == 3">
+                ,B.REFUND_FL AS refundFl
+            </when>
+            <when test="PROCESS_STATE == 1">
+                ,B.DELETE_FL AS deleteFl
+            </when>
+        </choose>
+        FROM t_order A
+        JOIN t_order_details B ON A.IORDER = B.IORDER
+        JOIN t_product C ON B.IPRODUCT = C.IPRODUCT
+        JOIN t_product_pics D ON C.IPRODUCT = D.IPRODUCT
+        JOIN t_review E ON B.IORDER = E.IORDER
+        WHERE A.IORDER = #{iorder}
+    </select>
+
+    <select id="getAfterRefund">
+        SELECT A.COMPLETE_FL AS completeFl, A.IREFUND AS irefund, A.CREATED_AT AS createdAt, D.PRODUCT_PIC AS product_pic, C.PRODUCT_NM AS productNm,
+        B.PRODUCT_CNT AS productCnt, C.PRICE AS price
+        FROM t_refund A
+        JOIN t_order_details B ON A.IDETAILS = B.IDETAILS
+        JOIN t_product C ON B.IPRODUCT = C.IPRODUCT
+        JOIN t_product_pics D ON C.IPRODUCT = D.IPRODUCT
+        JOIN t_order E ON B.IORDER = E.IORDER
+        WHERE B.IORDER = #{iorder} AND E.PROCESS_STATE = #{process_state}
+    </select>
+
+    <update id="cancelOrder">
+        UPDATE t_order_details
+        <choose>
+            <when test="process_state == 1">
+                SET PROCESS_STATE = 4
+            </when>
+            <when test="process_state == 3">
+                SET_PROCESS_STATE = 5
+            </when>
+        </choose>
+        WHERE IORDER = #{IORDER}
+    </update>
+
+    <delete id="refundOrder">
+        DELETE FROM t_order_details
+        WHERE PROCESS_STATE = 4 AND PROCESS_STATE = 5
+    </delete>
+
+</mapper>
