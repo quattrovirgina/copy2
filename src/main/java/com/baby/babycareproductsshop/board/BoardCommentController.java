@@ -5,6 +5,8 @@ import com.baby.babycareproductsshop.board.model.BoardCommentInsDto;
 import com.baby.babycareproductsshop.board.model.BoardCommentUpdDto;
 import com.baby.babycareproductsshop.common.ResVo;
 import com.baby.babycareproductsshop.common.Utils;
+import com.baby.babycareproductsshop.exception.AuthErrorCode;
+import com.baby.babycareproductsshop.exception.RestApiException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -28,13 +30,10 @@ public class BoardCommentController {
             if (Utils.isNotNull(list)) {
                 return list;
             } else {
-                // 추후 예외 처리 추가
-                return null;
+                throw new RestApiException(AuthErrorCode.COMMENT_NOT_FOUND);
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            // 추후 예외 처리 추가
-            return null;
+            throw new RestApiException(AuthErrorCode.COMMENT_NOT_FOUND);
         }
     }
 
@@ -45,13 +44,10 @@ public class BoardCommentController {
             if (Utils.isNotNull(dto)) {
                 return service.insComment(dto);
             } else {
-                // 예외 처리 추가
-                return null;
+                throw new RestApiException(AuthErrorCode.COMMENT_REGISTER_FAIL);
             }
         } catch (Exception e) {
-            // 추후 예외 처리 추가
-            e.printStackTrace();
-            return null;
+            throw new RestApiException(AuthErrorCode.COMMENT_REGISTER_FAIL);
         }
     }
 
@@ -62,13 +58,10 @@ public class BoardCommentController {
             if (Utils.isNotNull(icomment)) {
                 return service.delComment(icomment);
             } else {
-                // 추후 예외 처리 추가
-                return null;
+                throw new RestApiException(AuthErrorCode.POST_DELETE_FAIL);
             }
         } catch (Exception e) {
-            // 추후 예외 처리 추가
-            e.printStackTrace();
-            return null;
+            throw new RestApiException(AuthErrorCode.POST_DELETE_FAIL);
         }
     }
 
@@ -79,13 +72,10 @@ public class BoardCommentController {
             if (Utils.isNotNull(dto)) {
                 return service.updComment(dto);
             } else {
-                // 추후 예외 처리 추가
-                return null;
+                throw new RestApiException(AuthErrorCode.COMMENT_REGISTER_FAIL);
             }
         } catch (Exception e) {
-            // 추후 예외 처리 추가
-            e.printStackTrace();
-            return null;
+            throw new RestApiException(AuthErrorCode.COMMENT_REGISTER_FAIL);
         }
     }
 }

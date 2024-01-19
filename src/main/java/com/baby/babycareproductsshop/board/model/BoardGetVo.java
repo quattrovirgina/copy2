@@ -1,5 +1,6 @@
 package com.baby.babycareproductsshop.board.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -13,6 +14,7 @@ public class BoardGetVo {
     private String title;
     @Schema(title = "게시글 작성일", description = "")
     private String createdAt;
-    @Schema(title = "검색어", description = "")
+    @JsonIgnore
+//    @Schema(title = "검색어", description = "")
     private String keyword;
 }

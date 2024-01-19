@@ -40,7 +40,7 @@ public class BoardService {
 
             return dto;
         } catch (Exception e) {
-            throw new RestApiException(AuthErrorCode.GLOBAL_EXCEPTION);
+            throw new RestApiException(AuthErrorCode.PICS_CREATE_FAIL);
         }
     }
 
@@ -59,10 +59,10 @@ public class BoardService {
                     mapper.delBoard(dto.getIboard());
                     String path = "/board/" + dto.getIboard();
                     myFileUtils.delDirTrigger(path);
-                    throw new RestApiException(AuthErrorCode.GLOBAL_EXCEPTION);
+                    throw new RestApiException(AuthErrorCode.POST_REGISTER_FAIL);
                 }
             } else {
-                throw new RestApiException(AuthErrorCode.GLOBAL_EXCEPTION);
+                throw new RestApiException(AuthErrorCode.POST_REGISTER_FAIL);
             }
         } catch (Exception e) {
             throw new RestApiException(AuthErrorCode.GLOBAL_EXCEPTION);
@@ -82,18 +82,14 @@ public class BoardService {
                 if (dto.getPics().size() == insBoardPicsRows) {
                     return new ResVo(SUCCESS);
                 } else {
-                    // >>>>> 테이블에 게시글 수정은 됐으나 사진 업로드가 제대로 이루어지지 않았을 때?
-                    // 추후 예외 처리 추가
-                    return null;
+                    // >>>>> (추후 수정) 테이블에 게시글 수정은 됐으나 사진 업로드(수정)가 제대로 이루어지지 않았을 때
+                    throw new RestApiException(AuthErrorCode.POST_REGISTER_FAIL);
                 }
             } else {
-                // 추후 예외 처리 추가
-                return null;
+                throw new RestApiException(AuthErrorCode.POST_REGISTER_FAIL);
             }
         } catch (Exception e) {
-            // 추후 예외 처리 추가
-            e.printStackTrace();
-            return new ResVo(FAIL);
+            throw new RestApiException(AuthErrorCode.GLOBAL_EXCEPTION);
         }
     }
 
@@ -108,13 +104,11 @@ public class BoardService {
                 myFileUtils.delDirTrigger(path);
                 return new ResVo(SUCCESS);
             } else {
-                // 추후 예외 처리 추가
-                return null;
+                // >>>>> (추후 수정) 테이블에 게시글 삭제는 됐으나 사진 삭제가 제대로 이루어지지 않았을 때
+                throw new RestApiException(AuthErrorCode.POST_DELETE_FAIL);
             }
         } catch (Exception e) {
-            // 추후 예외 처리 추가
-            e.printStackTrace();
-            return null;
+            throw new RestApiException(AuthErrorCode.GLOBAL_EXCEPTION);
         }
     }
 
@@ -125,13 +119,10 @@ public class BoardService {
             if (Utils.isNotNull(vo)) {
                 return vo;
             } else {
-                // 추후 예외 처리 추가
-                return null;
+                throw new RestApiException(AuthErrorCode.POST_NOT_FOUND);
             }
         } catch (Exception e) {
-            // 추후 예외 처리 추가
-            e.printStackTrace();
-            return null;
+            throw new RestApiException(AuthErrorCode.GLOBAL_EXCEPTION);
         }
     }
 
@@ -142,12 +133,10 @@ public class BoardService {
             if (Utils.isNotNull(list)) {
                 return list;
             } else {
-                // 추후 예외 처리 추가
-                return null;
+                throw new RestApiException(AuthErrorCode.POST_NOT_FOUND);
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            throw new RestApiException(AuthErrorCode.GLOBAL_EXCEPTION);
         }
     }
 }

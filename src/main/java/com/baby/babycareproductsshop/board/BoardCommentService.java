@@ -3,6 +3,8 @@ package com.baby.babycareproductsshop.board;
 import com.baby.babycareproductsshop.board.model.*;
 import com.baby.babycareproductsshop.common.ResVo;
 import com.baby.babycareproductsshop.common.Utils;
+import com.baby.babycareproductsshop.exception.AuthErrorCode;
+import com.baby.babycareproductsshop.exception.RestApiException;
 import com.baby.babycareproductsshop.security.AuthenticationFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +23,6 @@ public class BoardCommentService {
     private final BoardCommentMapper mapper;
     private final AuthenticationFacade authenticationFacade;
 
-
     public List<BoardCommentGetVo> getComment(int iboard) {
         try {
             List<BoardCommentGetVo> list = mapper.getComment(iboard);
@@ -29,13 +30,10 @@ public class BoardCommentService {
             if (Utils.isNotNull(list)) {
                 return list;
             } else {
-                // 추후 예외 처리 추가
-                return null;
+                throw new RestApiException(AuthErrorCode.COMMENT_NOT_FOUND);
             }
         } catch (Exception e) {
-            // 추후 예외 처리 추가
-            e.printStackTrace();
-            return null;
+            throw new RestApiException(AuthErrorCode.GLOBAL_EXCEPTION);
         }
     }
 
@@ -46,13 +44,10 @@ public class BoardCommentService {
             if (Utils.isNotNull(insCommentRows)) {
                 return new ResVo(SUCCESS);
             } else {
-                // 추후 예외 처리 추가
-                return null;
+                throw new RestApiException(AuthErrorCode.COMMENT_REGISTER_FAIL);
             }
         } catch (Exception e) {
-            // 추후 예외 처리 추가
-            e.printStackTrace();
-            return null;
+            throw new RestApiException(AuthErrorCode.GLOBAL_EXCEPTION);
         }
     }
 
@@ -63,30 +58,24 @@ public class BoardCommentService {
             if (Utils.isNotNull(delCommentRows)) {
                 return new ResVo(SUCCESS);
             } else {
-                // 추후 예외 처리 추가
-                return null;
+                throw new RestApiException(AuthErrorCode.GLOBAL_EXCEPTION);
             }
         } catch (Exception e) {
-            // 추후 예외 처리 추가
-            e.printStackTrace();
-            return null;
+            throw new RestApiException(AuthErrorCode.GLOBAL_EXCEPTION);
         }
     }
 
     public ResVo updComment(BoardCommentUpdDto dto) {
-        int updCommentRows = mapper.updComment(dto);
-
         try {
+            int updCommentRows = mapper.updComment(dto);
+
             if (Utils.isNotNull(updCommentRows)) {
                 return new ResVo(SUCCESS);
             } else {
-                // 추후 예외 처리 추가
-                return null;
+                throw new RestApiException(AuthErrorCode.COMMENT_REGISTER_FAIL);
             }
         } catch (Exception e) {
-            // 추후 예외 처리 추가
-            e.printStackTrace();
-            return null;
+            throw new RestApiException(AuthErrorCode.GLOBAL_EXCEPTION);
         }
     }
 }

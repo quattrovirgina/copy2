@@ -25,7 +25,7 @@ public class BoardController {
 
     @GetMapping
     @Operation(summary = "게시글 목록 출력 기능", description = "")
-    public List<BoardGetVo> getBoard(@RequestParam(name = "board_code") int boardCode, @RequestParam(name = "page") int page, @RequestPart(required = false) String keyword) {
+    public List<BoardGetVo> getBoard(@RequestParam(name = "board_code") int boardCode, @RequestParam(name = "page") int page, @RequestParam(required = false) String keyword) {
         try {
             if (Utils.isNotNull(boardCode) && Utils.isNotNull(page)) {
                 PageNation.Criteria criteria = new PageNation.Criteria();
@@ -36,7 +36,7 @@ public class BoardController {
 //        PageNation pageNation = new PageNation(criteria, list.size());
                 return list;
             } else {
-                throw new RestApiException(AuthErrorCode.GLOBAL_EXCEPTION);
+                throw new RestApiException(AuthErrorCode.POST_NOT_FOUND);
             }
         } catch (Exception e) {
             throw new RestApiException(AuthErrorCode.GLOBAL_EXCEPTION);
@@ -50,7 +50,7 @@ public class BoardController {
             if (Utils.isNotNull(iboard)) {
                 return service.selBoard(iboard);
             } else {
-                throw new RestApiException(AuthErrorCode.GLOBAL_EXCEPTION);
+                throw new RestApiException(AuthErrorCode.POST_NOT_FOUND);
             }
         } catch (Exception e) {
             throw new RestApiException(AuthErrorCode.GLOBAL_EXCEPTION);
@@ -65,7 +65,7 @@ public class BoardController {
                 dto.setPics(pics);
                 return service.insBoard(dto);
             } else {
-                throw new RestApiException(AuthErrorCode.GLOBAL_EXCEPTION);
+                throw new RestApiException(AuthErrorCode.POST_REGISTER_FAIL);
             }
         } catch (Exception e) {
             throw new RestApiException(AuthErrorCode.GLOBAL_EXCEPTION);
@@ -80,7 +80,7 @@ public class BoardController {
                 dto.setPics(pics);
                 return service.updBoard(dto);
             } else {
-                throw new RestApiException(AuthErrorCode.GLOBAL_EXCEPTION);
+                throw new RestApiException(AuthErrorCode.POST_REGISTER_FAIL);
             }
         } catch (Exception e) {
             throw new RestApiException(AuthErrorCode.GLOBAL_EXCEPTION);
