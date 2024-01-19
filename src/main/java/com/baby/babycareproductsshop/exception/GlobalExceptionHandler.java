@@ -13,6 +13,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -21,13 +22,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        Map<String, Object> body = new HashMap<>();
-        BindingResult bindingResult = ex.getBindingResult();
-        for (FieldError fieldError : bindingResult.getFieldErrors()) {
-            body.put("errorCode", String.valueOf(status.value()));
-            body.put("message", fieldError.getDefaultMessage());
-        }
-        return new ResponseEntity<>(body, headers, status);
+
+        List<String> errors = ex.getBindingResult().getFieldErrors().stream().map(x-> x.getDefaultMessage()).toList();
+        String errStr = String.join(" / ", errors);
+        log.warn("handleMethodArgumentNotValid", ex);
+        return handleExceptionInternal(CommonErrorCode.INVALID_PARAMETER, errStr);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

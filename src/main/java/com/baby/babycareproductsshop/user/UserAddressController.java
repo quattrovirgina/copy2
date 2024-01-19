@@ -5,6 +5,7 @@ import com.baby.babycareproductsshop.user.model.UserDelAddressDto;
 import com.baby.babycareproductsshop.user.model.UserInsAddressDto;
 import com.baby.babycareproductsshop.user.model.UserSelAddressVo;
 import com.baby.babycareproductsshop.user.model.UserUpdAddressDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ import java.util.List;
 public class UserAddressController {
     private final UserService service;
     @PostMapping
-    public ResVo postUserAddress(@RequestBody UserInsAddressDto dto){
+    public ResVo postUserAddress(@Valid  @RequestBody UserInsAddressDto dto){
         return service.postUserAddress(dto);
     }
 
@@ -28,7 +29,7 @@ public class UserAddressController {
     }
 
     @PutMapping
-    public ResVo putUserAddress(@RequestBody UserUpdAddressDto dto) {
+    public ResVo putUserAddress(@Valid @RequestBody UserUpdAddressDto dto) {
         return service.putUserAddress(dto);
     }
 
