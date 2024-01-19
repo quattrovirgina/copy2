@@ -35,18 +35,14 @@ public class ReviewService {
         insDto.setIreview(dto.getIreview());
         log.info("insDto = {}",insDto);
         String target = "review/" + dto.getIreview();
-        if (dto.getPics().size() > 6) {
-            if (dto.getProductScore() < 1 || dto.getContents() == null || dto.getContents().equals("")) {
-                throw new RestApiException(AuthErrorCode.REVIEW_NOT_PRODUCT_SCORE_OR_CONTENTS);
-            }
-            throw new RestApiException(AuthErrorCode.UPLOAD_PIC_NOT_REVIEW);
+        if (dto.getPics().size() >= 6 || dto.getProductScore() < 1 || dto.getContents() == null || dto.getContents().equals("")) {
+            throw new RestApiException(AuthErrorCode.REVIEW_NOT_PRODUCT_SCORE_OR_CONTENTS_PIC_OVER_REVIEW);
         }
-        else if (dto.getPics().size() <= 5 && dto.getProductScore() > 1) {
+        if (dto.getPics().size() <= 5 || dto.getProductScore() > 1 || dto.getContents() != null || dto.getContents().equals(" ")) {
             for (MultipartFile file : dto.getPics()) {
                String saveFileNm = myFileUtils.transferTo(file, target);
                insDto.getPics().add(saveFileNm);
             }
-            throw new RestApiException(AuthErrorCode.UPLOAD_REVIEW_REGISTRATION_REVIEW);
         }
         int insReview = mapper.insReview(dto);
         int insPics = mapper.insReviewPics(insDto);
@@ -85,7 +81,7 @@ public class ReviewService {
         int selReview = mapper.selReviewByReview(dto);
         if( selReview == 0){
             // 익셉션 핸들러 추후 작업 진행 예정
-            return new ResVo(Const.FAIL);
+            throw new RestApiException(AuthErrorCode.DEL_REVIEW_NOT_FAIL);
         }
         if (selReview == 1){
             // 익셉션 핸들러 추후 작업 진행 예정
