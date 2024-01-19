@@ -14,6 +14,9 @@ public enum AuthErrorCode implements ErrorCode{ //enum : Const 대체 할 수 �
     REVIEW_NOT_PRODUCT_SCORE_OR_CONTENTS(HttpStatus.NOT_FOUND,"사용하신 제품의 별점과 후기을 알려주세요!!"),
     UPLOAD_REVIEW_REGISTRATION_REVIEW(HttpStatus.OK,"리뷰가 정상적으로 등록되었습니다."),
 
+    // 게시판
+    GLOBAL_EXCEPTION(HttpStatus.BAD_REQUEST, "요청 사항을 처리할 수 없습니다."),
+    // 게시판 댓글
 
 //    NOT_ALLOWED_ADDRESS_DETAIL(HttpStatus.BAD_REQUEST, "상세 주소를 입력해주세요."),
 //    NOT_ALLOWED_ADDRESS(HttpStatus.BAD_REQUEST, "주소를 입력해주세요."),
